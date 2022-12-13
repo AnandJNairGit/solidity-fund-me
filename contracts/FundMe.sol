@@ -6,9 +6,10 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe
 {
+  uint256 public minimumUsd = 50 * 1e18;
    function fund() public payable {
        msg.value; //to get howmuch value somebody is sending 
-       require(msg.value > 1e18, "didn't receive enough value"); //1e18= 1 * 10 ** 18
+       require(getConversion(msg.value) > minimumUsd, "didn't receive enough value"); //1e18= 1 * 10 ** 18
    }  
 
    function getVersion() public view returns(uint256){
@@ -22,5 +23,12 @@ contract FundMe
     (,int256 price,,,) = priceFeed.latestRoundData(); // ETH in terms of USD
     return uint256(price * 1e10);
 
+   }
+
+   function getConversion(uint256 ethAmount) public view returns (uint256)
+   {
+     uint256 ethPrice = getPrice();
+     uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18;
+     return ethAmountInUsd;
    }
 }
