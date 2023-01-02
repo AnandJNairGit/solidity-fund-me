@@ -8,11 +8,13 @@ contract FundMe
 {
   uint256 public minimumUsd = 50 * 1e18;
   address [] public funders;
+  mapping(address => uint256) public fundersAmount;
 
    function fund() public payable {
        msg.value; //to get howmuch value somebody is sending 
        require(getConversion(msg.value) > minimumUsd, "didn't receive enough value"); //1e18= 1 * 10 ** 18
        funders.push(msg.sender);
+       fundersAmount[msg.sender]= msg.value;
    }  
 
    function getVersion() public view returns(uint256){
