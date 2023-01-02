@@ -7,9 +7,12 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 contract FundMe
 {
   uint256 public minimumUsd = 50 * 1e18;
+  address [] public funders;
+
    function fund() public payable {
        msg.value; //to get howmuch value somebody is sending 
        require(getConversion(msg.value) > minimumUsd, "didn't receive enough value"); //1e18= 1 * 10 ** 18
+       funders.push(msg.sender);
    }  
 
    function getVersion() public view returns(uint256){
